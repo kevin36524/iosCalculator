@@ -28,10 +28,15 @@
 }
 
 - (IBAction)digitPressed:(UIButton *)sender {
+    
+    NSString *digit = sender.currentTitle;
+    
     if (self.isUserInTheMiddleOfTyping) {
-        self.display.text = [self.display.text stringByAppendingString:sender.currentTitle];
+        if (![digit isEqual:@"."] || [self.display.text rangeOfString:@"."].location == NSNotFound) {
+            self.display.text = [self.display.text stringByAppendingString:digit];
+        }
     } else {
-        self.display.text = sender.currentTitle;
+        self.display.text = digit;
         self.isUserInTheMiddleOfTyping = YES;
     }
 }
