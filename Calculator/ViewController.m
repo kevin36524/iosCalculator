@@ -41,6 +41,12 @@
     }
 }
 
+
+- (IBAction)cancelPressed {
+    [self.brain clearMemory];
+    self.display.text = @"0";
+}
+
 - (IBAction)enterPressed {
     [self.brain pushOperand:[self.display.text doubleValue]];
     self.isUserInTheMiddleOfTyping = NO;

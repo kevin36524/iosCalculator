@@ -27,6 +27,10 @@
     [self.operandStack addObject:[NSNumber numberWithDouble:value]];
 }
 
+- (void) clearMemory {
+    [self.operandStack removeAllObjects];
+}
+
 - (double) popOperand {
     NSNumber *numObj;
     
