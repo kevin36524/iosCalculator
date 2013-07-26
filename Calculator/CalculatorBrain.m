@@ -10,11 +10,20 @@
 
 @interface CalculatorBrain()
 @property (strong,nonatomic) NSMutableArray *operandStack;
+@property (strong,nonatomic) NSString *displayStack;
 @end
 
 @implementation CalculatorBrain
 
 @synthesize operandStack = _operandStack;
+@synthesize displayStack = _displayStack;
+
+- (NSString *) displayStack {
+    if (!_displayStack) {
+        _displayStack = @"";
+    }
+    return _displayStack;
+}
 
 - (NSMutableArray *) operandStack {
     if (!_operandStack) {
@@ -23,12 +32,20 @@
     return _operandStack;
 }
 
-- (void) pushOperand:(double)value {
+
+
+- (void) justPushOperand:(double)value {
     [self.operandStack addObject:[NSNumber numberWithDouble:value]];
+}
+
+- (void) pushOperand:(double)value {
+    [self justPushOperand:value];
+    self.displayStack = [self.displayStack stringByAppendingFormat:@"%g ",value];
 }
 
 - (void) clearMemory {
     [self.operandStack removeAllObjects];
+    self.displayStack = @"";
 }
 
 - (double) popOperand {
@@ -63,8 +80,13 @@
         result = 3.14;
     }
     
-    [self pushOperand:result];
+    self.displayStack = [self.displayStack stringByAppendingFormat:@"%@ ",operation];
+    [self justPushOperand:result];
     return result;
+}
+
+- (NSString *) description {
+    return self.displayStack;
 }
 
 @end
