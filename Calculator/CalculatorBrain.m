@@ -35,7 +35,7 @@
 
 
 - (void) justPushOperand:(double)value {
-    [self.operandStack addObject:[NSNumber numberWithDouble:value]];
+    [self.operandStack addObject:[NSNumber numberWithDouble:value]]; 
 }
 
 - (void) pushOperand:(double)value {
