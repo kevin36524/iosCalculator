@@ -14,4 +14,8 @@
 - (double) performOperation:(NSString*) operation;
 - (void) clearMemory;
 
+@property (readonly) id program;
++ (void) runProgram:(id) program;
++ (void) progDescription: (id) program;
+
 @end
