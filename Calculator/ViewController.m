@@ -46,6 +46,10 @@
     self.stackDisplay.text = [self.brain description];
 }
 
+- (IBAction)variablePressed:(UIButton *)sender {
+    [self.brain pushOperandObj:sender.currentTitle];
+}
+
 - (IBAction)cancelPressed {
     [self.brain clearMemory];
     self.display.text = @"0";

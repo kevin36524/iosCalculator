@@ -32,6 +32,11 @@
     [self.programStack addObject:[NSNumber numberWithDouble:value]];
 }
 
+- (void) pushOperandObj:(id) value {
+    [self pushOperand:0]; // temp Hack
+    //[self.programStack addObject:value];
+}
+
 - (void) clearMemory {
     [self.programStack removeAllObjects];
 }
@@ -89,20 +94,71 @@
     return result;
 }
 
-+ (NSString *) progDescription: (id) program {
-    NSArray *stackArr;
-    NSString *retString = @"";
-    
-    if ([program isKindOfClass:[NSArray class]]) {
-        stackArr = program;
-        retString = [stackArr componentsJoinedByString:@" "];
++ (BOOL)isOperation:(NSString *)operation {
+    BOOL retVal = YES;
+    if ([[self getOperationType:operation] isEqual:@"variable"]) {
+        retVal = NO;
     }
+    return retVal;
+}
+
++ (NSString *) getOperationType: (NSString*) operation {
+    NSSet *noaryOperation = [[NSSet alloc] initWithObjects:@"π",nil];
+    NSSet *unaryOperation = [[NSSet alloc] initWithObjects:@"cos",@"sin",@"sqrt", nil ];
+    NSSet *binaryOperation = [[NSSet alloc] initWithObjects:@"+",@"-",@"/",@"*", nil];
+    NSString *result = @"variable";
     
-    return retString;
+    if ([noaryOperation containsObject:operation]) {
+        result = @"noary";
+    } else if ([unaryOperation containsObject:operation]) {
+        result = @"unary";
+    } else if ([binaryOperation containsObject:operation]) {
+        result = @"binary";
+    }
+    return result;
+}
+
++ (NSString *)descriptionOfTopOfStack: (NSMutableArray *) localArray {
+    id topObject;
+    NSString *operationType, *tempVal, *retStr = @"";
+    
+    topObject = [localArray lastObject];
+    
+    if (topObject){
+        [localArray removeLastObject];
+        if ([topObject isKindOfClass:[NSNumber class]]) {
+            retStr = [NSString stringWithFormat:@" %g",[topObject doubleValue]];
+        } else if ([topObject isKindOfClass:[NSString class]]) {
+            operationType = [self getOperationType:topObject];
+            if ([operationType isEqual:@"noary"] || [operationType isEqual:@"variable"]) {
+                retStr = topObject;
+            } else if ([operationType isEqual:@"unary"]) {
+                retStr = [NSString stringWithFormat:@"%@( %@ )",topObject,[self descriptionOfTopOfStack:localArray]];
+            } else if ([operationType isEqual:@"binary"]) {
+                tempVal = [self descriptionOfTopOfStack:localArray];
+                retStr = [NSString stringWithFormat:@"(%@ %@ %@)", [self descriptionOfTopOfStack:localArray], topObject, tempVal];
+            }
+        }
+    }
+    return retStr;
+}
+
+
++ (NSString *) descriptionOfProgram: (id) program {
+    NSMutableArray *newStack = [[NSMutableArray alloc] init];
+    if ([program isKindOfClass:[NSArray class]]) {
+        program = [program mutableCopy];
+        while ([program lastObject]) {
+            [newStack addObject:[self descriptionOfTopOfStack:program]];
+        }
+    }
+    return [newStack componentsJoinedByString:@","];
 }
 
 - (NSString *) description {
-    return [[self class] progDescription:self.program];
+    
+    return [[self class] descriptionOfProgram:[self.program copy]];
+    //return [self.program componentsJoinedByString:@" "];
 }
 
 @end
