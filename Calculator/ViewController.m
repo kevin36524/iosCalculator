@@ -48,6 +48,7 @@
 
 - (IBAction)variablePressed:(UIButton *)sender {
     [self.brain pushOperandObj:sender.currentTitle];
+    [self updateStackDisplay];
 }
 
 - (IBAction)cancelPressed {

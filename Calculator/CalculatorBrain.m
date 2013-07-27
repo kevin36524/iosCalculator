@@ -33,8 +33,7 @@
 }
 
 - (void) pushOperandObj:(id) value {
-    [self pushOperand:0]; // temp Hack
-    //[self.programStack addObject:value];
+    [self.programStack addObject:value];
 }
 
 - (void) clearMemory {
@@ -76,6 +75,21 @@
     return result;
 }
 
+
++ (NSSet *)variablesUsedInProgram:(id)program {
+    NSMutableSet * retSet = nil;
+    id obj;
+    
+    for ( obj in program) {
+        if ([obj isKindOfClass:[NSString class]] && ![self isOperation:obj]) {
+            if (!retSet) {retSet = [[NSMutableSet alloc] init]; }
+            [retSet addObject:obj];
+        }
+    }
+    
+    return [retSet copy];
+}
+
 + (double) runProgram:(id)program {
     double result = 0;
     if ([program isKindOfClass:[NSArray class]]) {
@@ -85,11 +99,35 @@
     return result;
 }
 
++ (double)runProgram:(id)program usingVariableValues:(NSDictionary *)variableValues{
+    NSMutableArray * mutableProgram = [[NSMutableArray alloc] init];
+    NSSet *varSet;
+    NSNumber *varVal;
+    id loopObj;
+    
+    if ([program isKindOfClass:[NSArray class]]) {
+        varSet = [self variablesUsedInProgram:[program copy]];
+    }
+    if (varSet) {
+        for (loopObj in program) {
+            if ([varSet containsObject:loopObj]){
+                varVal = [variableValues objectForKey:loopObj];
+                if (!varVal) varVal = [NSNumber numberWithDouble:0];
+                [mutableProgram addObject:varVal];
+            } else {
+                [mutableProgram addObject:loopObj];
+            }
+        }
+    }
+    
+    return [self evalStack: mutableProgram];
+}
+
 - (double) performOperation:(NSString *)operation {
     double result;
     
     [self.programStack addObject:operation];
-    result = [[self class] runProgram:self.program];
+    result = [[self class] runProgram:self.program usingVariableValues:nil];
     
     return result;
 }
@@ -157,7 +195,7 @@
 
 - (NSString *) description {
     
-    return [[self class] descriptionOfProgram:[self.program copy]];
+    return [[self class] descriptionOfProgram:self.program];
     //return [self.program componentsJoinedByString:@" "];
 }
 
