@@ -119,14 +119,16 @@
     return [self evalStack: mutableProgram];
 }
 
-- (double) performOperation:(NSString *)operation {
-    double result;
-    
-    [self.programStack addObject:operation];
-    result = [[self class] runProgram:self.program usingVariableValues:nil];
-    
-    return result;
+- (double) performOperation:(NSString *)operation usingVariableValues:(NSDictionary *)variableValues{
+    if (operation) [self.programStack addObject:operation];
+    return [[self class] runProgram:self.program usingVariableValues:variableValues];
 }
+
+/* kept for backward compatibility */
+- (double) performOperation:(NSString *)operation {
+    return [self performOperation:operation usingVariableValues:nil];
+}
+
 
 + (BOOL)isOperation:(NSString *)operation {
     BOOL retVal = YES;
