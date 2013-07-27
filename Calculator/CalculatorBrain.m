@@ -90,13 +90,9 @@
     return [retSet copy];
 }
 
+/* no longer needed just kept for backward compatibility */
 + (double) runProgram:(id)program {
-    double result = 0;
-    if ([program isKindOfClass:[NSArray class]]) {
-        NSMutableArray *localStack = [program mutableCopy];
-        result = [self evalStack: localStack];
-    }
-    return result;
+    return [self runProgram:program usingVariableValues:nil];
 }
 
 + (double)runProgram:(id)program usingVariableValues:(NSDictionary *)variableValues{
