@@ -59,6 +59,9 @@
                                 <state key="highlighted">
                                     <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
+                                <connections>
+                                    <action selector="undoPressed:" destination="2" eventType="touchUpInside" id="aSu-G7-fZK"/>
+                                </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="qrc-bV-pdc">
                                 <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
@@ -530,6 +533,7 @@
             <relationships>
                 <relationship kind="action" name="digitPressed:" candidateClass="UIButton"/>
                 <relationship kind="action" name="operationPressed:" candidateClass="UIButton"/>
+                <relationship kind="action" name="undoPressed:" candidateClass="UIButton"/>
                 <relationship kind="action" name="updateVariables:" candidateClass="UIButton"/>
                 <relationship kind="action" name="variablePressed:" candidateClass="UIButton"/>
                 <relationship kind="outlet" name="display" candidateClass="UILabel"/>

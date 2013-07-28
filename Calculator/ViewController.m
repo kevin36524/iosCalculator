@@ -31,8 +31,14 @@
     return _brain;
 }
 
+- (void) updateStackDisplay {
+    self.stackDisplay.text = [self.brain description];
+}
+
 - (void) updateDisplay:(double)result {
     self.display.text = [NSString stringWithFormat:@"%g",result];
+    [self updateStackDisplay];
+    
 }
 
 - (IBAction)updateVariables:(UIButton *)sender {
@@ -68,10 +74,6 @@
     }
 }
 
-- (void) updateStackDisplay {
-    self.stackDisplay.text = [self.brain description];
-}
-
 - (IBAction)variablePressed:(UIButton *)sender {
     [self.brain pushOperandObj:sender.currentTitle];
     [self updateStackDisplay];
@@ -81,6 +83,16 @@
     [self.brain clearMemory];
     self.display.text = @"0";
     [self updateStackDisplay];
+}
+
+- (IBAction)undoPressed:(UIButton *)sender {
+    if (self.isUserInTheMiddleOfTyping) {
+        self.display.text = [self.display.text substringToIndex:[self.display.text length] -1];
+        if (self.display.text.length == 0) self.isUserInTheMiddleOfTyping = NO;
+    } else {
+        [self.brain removeTopOfStack];
+        [self updateDisplay:[self.brain performOperation:nil usingVariableValues:self.variableValues]];
+    }
 }
 
 - (IBAction)enterPressed {
@@ -96,7 +108,6 @@
     }
     
     [self updateDisplay:[self.brain performOperation:sender.currentTitle usingVariableValues:self.variableValues]];
-    [self updateStackDisplay];
 }
 
 @end

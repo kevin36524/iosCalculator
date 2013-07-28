@@ -40,6 +40,10 @@
     [self.programStack removeAllObjects];
 }
 
+- (void) removeTopOfStack {
+    if ([self.programStack lastObject]) [self.programStack removeLastObject];
+}
+
 + (double) evalStack:(NSMutableArray *) localStack {
     id topObj = [localStack lastObject];
     double tempVal,result = 0;

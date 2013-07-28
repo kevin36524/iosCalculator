@@ -14,6 +14,7 @@
 - (void) pushOperandObj:(id) value;
 - (double) performOperation:(NSString *)operation;
 - (double) performOperation:(NSString *)operation usingVariableValues:(NSDictionary *)variableValues;
+- (void) removeTopOfStack;
 - (void) clearMemory;
 
 @property (readonly) id program;
