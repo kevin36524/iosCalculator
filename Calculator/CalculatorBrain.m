@@ -103,16 +103,18 @@
     
     if ([program isKindOfClass:[NSArray class]]) {
         varSet = [self variablesUsedInProgram:[program copy]];
-    }
-    if (varSet) {
-        for (loopObj in program) {
-            if ([varSet containsObject:loopObj]){
-                varVal = [variableValues objectForKey:loopObj];
-                if (!varVal) varVal = [NSNumber numberWithDouble:0];
-                [mutableProgram addObject:varVal];
-            } else {
-                [mutableProgram addObject:loopObj];
+        if (varSet) {
+            for (loopObj in program) {
+                if ([varSet containsObject:loopObj]){
+                    varVal = [variableValues objectForKey:loopObj];
+                    if (!varVal) varVal = [NSNumber numberWithDouble:0];
+                    [mutableProgram addObject:varVal];
+                } else {
+                    [mutableProgram addObject:loopObj];
+                }
             }
+        } else {
+            mutableProgram = [program mutableCopy];
         }
     }
     
