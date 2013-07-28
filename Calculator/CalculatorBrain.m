@@ -127,7 +127,7 @@
 
 - (double) performOperation:(NSString *)operation usingVariableValues:(NSDictionary *)variableValues{
     if (operation) [self.programStack addObject:operation];
-    return [[self class] runProgram:self.program usingVariableValues:variableValues];
+    return [CalculatorBrain runProgram:self.program usingVariableValues:variableValues];
 }
 
 /* kept for backward compatibility */
@@ -199,7 +199,7 @@
 
 - (NSString *) description {
     
-    return [[self class] descriptionOfProgram:self.program];
+    return [CalculatorBrain descriptionOfProgram:self.program];
     //return [self.program componentsJoinedByString:@" "];
 }
 
